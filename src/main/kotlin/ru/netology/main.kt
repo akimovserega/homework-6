@@ -17,7 +17,7 @@ data class Post(
     val friendsOnly: Boolean,
     val comments: Comments,
     val copyright: Copyright,
-    val likes: Likes,
+    val likes: Likes?,
     val reposts: Repost,
     val views: Views,
     val postType: String,
@@ -29,7 +29,39 @@ data class Post(
     val markedAsAds: Boolean,
     val isFavorite: Boolean,
     val donut: Donut,
-    val postponedId: Int
+    val postponedId: Int,
+    val geo: Geo?,
+    val postSource: PostSource?,
+    val copyHistory: Array<Repost>?
+
+)
+
+data class PostSource(
+    val type: String,
+    val platform: String,
+    val data: String,
+    val url: String
+)
+
+data class Geo(
+    val type: String,
+    val coordinates: String,
+    val place: Place
+)
+
+data class Place (
+    val id: Int,
+    val title: String,
+    val latitude: Int,
+    val longitude: Int,
+    val created: Int,
+    val icon: String,
+    val checkins: Int,
+    val updated: Int,
+    val type: Int,
+    val country: Int,
+    val city: Int,
+    val address: String
 )
 
 data class Donut(
@@ -82,13 +114,13 @@ object WallService {
 
     fun add(post: Post): Post {
         nextId++
-        posts += post.copy(id= nextId)
+        posts += post.copy(id = nextId)
         return posts.last()
     }
 
-    fun update(post: Post): Boolean{
-        for((index,postSearch) in posts.withIndex()){
-            if (postSearch.id ==post.id){
+    fun update(post: Post): Boolean {
+        for ((index, postSearch) in posts.withIndex()) {
+            if (postSearch.id == post.id) {
                 // меняем всё, кроме id владельца (ownerId) и даты создания (date)
                 posts[index] = post.copy(ownerId = postSearch.ownerId, date = postSearch.date)
                 return true
@@ -97,8 +129,21 @@ object WallService {
         return false
     }
 
+    fun addLikes(post: Post): Boolean {
+        for ((index, postSearch) in posts.withIndex()) {
+            if (postSearch.id == post.id) {
+                // добавляем like при каждом вызове
+                var likes = postSearch.likes?.count ?: 0
+                posts[index] = post.copy(likes = Likes(likes + 1, true, true, true))
+                return true
+            }
+        }
+        return false
+    }
+
+
     fun removeAll() {
         posts = emptyArray<Post>()
-        nextId =0
+        nextId = 0
     }
 }
