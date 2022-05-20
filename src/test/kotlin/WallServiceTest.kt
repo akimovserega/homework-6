@@ -17,7 +17,7 @@ class WallServiceTest {
             Views(0), "type", 45654, true,
             true, true, false, false, false,
             Donut(false, 32423, PlaceHolder(), true, "edit_mode"),
-            4545, null,null,null
+            4545, null, null, null, null
         )
 
 
@@ -45,7 +45,7 @@ class WallServiceTest {
             Views(0), "type", 45654, true,
             true, true, false, false, false,
             Donut(false, 32423, PlaceHolder(), true, "edit_mode"),
-            4545, null,null,null
+            4545, null, null, null, null
         )
         val post = WallService.add(newPost)
 
@@ -67,7 +67,7 @@ class WallServiceTest {
             Views(0), "type", 45654, true,
             true, true, false, false, false,
             Donut(false, 32423, PlaceHolder(), true, "edit_mode"),
-            4545, null,null,null
+            4545, null, null, null, null
         )
         // выполняем целевое действие
         val result = WallService.update(updatePost)
@@ -90,7 +90,7 @@ class WallServiceTest {
             Views(0), "type", 45654, true,
             true, true, false, false, false,
             Donut(false, 32423, PlaceHolder(), true, "edit_mode"),
-            4545, null,null,null
+            4545, null, null, null, null
         )
         // выполняем целевое действие
         val result = WallService.update(updatePost)
@@ -111,7 +111,7 @@ class WallServiceTest {
             Views(0), "type", 45654, true,
             true, true, false, false, false,
             Donut(false, 32423, PlaceHolder(), true, "edit_mode"),
-            4545, null,null,null
+            4545, null, null, null, null
         )
         val result = WallService.addLikes(updatePost)
         assertTrue(result)
@@ -129,9 +129,23 @@ class WallServiceTest {
             Views(0), "type", 45654, true,
             true, true, false, false, false,
             Donut(false, 32423, PlaceHolder(), true, "edit_mode"),
-            4545, null,null,null
+            4545, null, null, null, null
         )
         val result = WallService.addLikes(updatePost)
         assertTrue(result)
+    }
+
+    @Test
+    fun check_owner_id_of_attachment() {
+        val id = ownerIdReturn(
+            AudioAttachment(
+                1, 777,
+                "https://...mp3",
+                Audio("Nickelback", "Far away", 238, 5654, 657567, 1),
+                24354, false, true
+            )
+        )
+
+        assertNotNull(id)
     }
 }

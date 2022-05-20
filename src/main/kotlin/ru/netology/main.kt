@@ -32,8 +32,8 @@ data class Post(
     val postponedId: Int,
     val geo: Geo?,
     val postSource: PostSource?,
-    val copyHistory: Array<Repost>?
-
+    val copyHistory: Array<Repost>?,
+    val attachment: Attachment?
 )
 
 data class PostSource(
@@ -49,7 +49,7 @@ data class Geo(
     val place: Place
 )
 
-data class Place (
+data class Place(
     val id: Int,
     val title: String,
     val latitude: Int,
@@ -133,7 +133,7 @@ object WallService {
         for ((index, postSearch) in posts.withIndex()) {
             if (postSearch.id == post.id) {
                 // добавляем like при каждом вызове
-                var likes = postSearch.likes?.count ?: 0
+                val likes = postSearch.likes?.count ?: 0
                 posts[index] = post.copy(likes = Likes(likes + 1, true, true, true))
                 return true
             }
