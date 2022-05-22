@@ -139,13 +139,25 @@ class WallServiceTest {
     fun check_owner_id_of_attachment() {
         val id = ownerIdReturn(
             AudioAttachment(
-                1, 777,
-                "https://...mp3",
-                Audio("Nickelback", "Far away", 238, 5654, 657567, 1),
-                24354, false, true
-            )
+                audio = Audio(
+                    13123, 3453454, "https://...mp3",
+                    235232, true, true, "Nickelback",
+                    "Far away", 238, 5654, 657567, 1
+                ),
+
+                )
         )
 
         assertNotNull(id)
     }
 }
+
+/*
+
+            AudioAttachment(
+                1, 777,
+                "https://...mp3",
+                Audio("Nickelback", "Far away", 238, 5654, 657567, 1),
+                24354, false, true
+            )
+ */

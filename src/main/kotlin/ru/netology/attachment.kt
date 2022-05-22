@@ -2,20 +2,41 @@ package ru.netology
 
 
 // класс attachment, 5 видов
-abstract class Attachment(val type: String)
+abstract class Attachment(open val type: String = "non-type")
 
 data class AudioAttachment(
+    override val type: String = "audio",
+    val audio: Audio
+) : Attachment()
+
+data class GraffitiAttachment(
+    override val type: String = "graffiti",
+    val graffiti: Graffiti
+) : Attachment()
+
+data class PhotoAttachment(
+    override val type: String = "photo",
+    val photo: Photo
+) : Attachment()
+
+data class StickerAttachment(
+    override val type: String = "sticker",
+    val sticker: Sticker
+) : Attachment()
+
+data class AlbumAttachment(
+    override val type: String = "album",
+    val album: Album
+) : Attachment()
+
+
+data class Audio(
     val id: Int,
     val ownerId: Int,
     val url: String,
-    val audioInfo: Audio,
     val date: Int,
     val noSearch: Boolean,
-    val isHQ: Boolean
-
-) : Attachment("audio")
-
-data class Audio(
+    val isHQ: Boolean,
     val artist: String,
     val title: String,
     val duration: Int,
@@ -24,15 +45,15 @@ data class Audio(
     val genreId: Int
 )
 
-data class GraffitiAttachment(
+data class Graffiti(
     val id: Int,
     val ownerId: Int,
     val url: String,
     val width: Int,
     val height: Int
-) : Attachment("graffiti")
+)
 
-data class PhotoAttachment(
+data class Photo(
     val id: Int,
     val ownerId: Int,
     val albumId: Int,
@@ -42,7 +63,7 @@ data class PhotoAttachment(
     val sizes: Array<PhotoCopy>,
     val width: Int,
     val height: Int
-) : Attachment("photo")
+)
 
 data class PhotoCopy(
     val type: String,
@@ -51,12 +72,12 @@ data class PhotoCopy(
     val height: Int
 )
 
-data class StickerAttachment(
+data class Sticker(
     val productId: Int,
     val stickerId: Int,
     val images: Array<ImageSticker>,
     val imagesWithBackground: Array<ImageSticker>
-) : Attachment("sticker")
+)
 
 data class ImageSticker(
     val url: String,
@@ -64,7 +85,7 @@ data class ImageSticker(
     val height: Int
 )
 
-data class AlbumAttachment(
+data class Album(
     val id: Int,
     val thumb: PhotoAttachment,
     val ownerId: Int,
@@ -73,15 +94,17 @@ data class AlbumAttachment(
     val created: Int,
     val updated: Int,
     val size: Int
-) : Attachment("album")
+)
 
-fun ownerIdReturn (attachment: Attachment): Int? {
+
+fun ownerIdReturn(attachment: Attachment): Int? {
+
     return when (attachment.type) {
 
-        "audio" -> (attachment as AudioAttachment).ownerId
-        "photo" -> (attachment as PhotoAttachment).ownerId
-        "graffiti" ->  (attachment as GraffitiAttachment).ownerId
-        "album" ->  (attachment as AlbumAttachment).ownerId
+        "audio" -> (attachment as AudioAttachment).audio.ownerId
+        "photo" -> (attachment as PhotoAttachment).photo.ownerId
+        "graffiti" -> (attachment as GraffitiAttachment).graffiti.ownerId
+        "album" -> (attachment as AlbumAttachment).album.ownerId
         else -> null
     }
 
