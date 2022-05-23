@@ -108,9 +108,56 @@ data class Comments(
     val canOpen: Boolean
 )
 
+data class Comment(
+    val id: Int,
+    val postId: Long,
+    val fromId: Int,
+    val date: Int,
+    val text: String,
+    val donut: Donut?,
+    val replyToUser: Int?,
+    val replyToComment: Int?,
+    val attachments: Array<Attachment>?,
+    val parentsStack: Array<Comment>?,
+    val thread: ThreadComment?
+
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Comment
+
+        if (id != other.id) return false
+        if (fromId != other.fromId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + fromId
+        return result
+    }
+}
+
+data class ThreadComment(
+    val count: Int,
+    val items: Array<Comment>?,
+    val canPost: Boolean,
+    val showReplyButton: Boolean,
+    val groupsCanPost: Boolean,
+)
+
+
+class PostNotFoundException(message: String) : RuntimeException(message)
+
 object WallService {
     private var posts = emptyArray<Post>()
-    private var nextId: Long = 0;
+    private var nextId: Long = 0
+    private var nextIdComment: Int = 0
+
+    private var comments = emptyArray<Comment>()
 
     fun add(post: Post): Post {
         nextId++
@@ -144,6 +191,23 @@ object WallService {
 
     fun removeAll() {
         posts = emptyArray<Post>()
+        comments = emptyArray<Comment>()
         nextId = 0
+        nextIdComment = 0
+    }
+
+
+    fun createComment(comment: Comment): Boolean {
+
+        for (postSearch in posts) {
+            if (postSearch.id == comment.postId) {
+                nextIdComment++
+                comments += comment.copy(id = nextIdComment)
+                return true
+            }
+        }
+
+        throw PostNotFoundException("невозможно добавить комментарий, пост не найден")
+
     }
 }

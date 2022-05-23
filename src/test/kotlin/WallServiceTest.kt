@@ -3,6 +3,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import ru.netology.*
+import ru.netology.WallService.createComment
 
 class WallServiceTest {
     @Before
@@ -143,21 +144,34 @@ class WallServiceTest {
                     13123, 3453454, "https://...mp3",
                     235232, true, true, "Nickelback",
                     "Far away", 238, 5654, 657567, 1
-                ),
-
                 )
+            )
         )
 
         assertNotNull(id)
     }
+
+    @Test(expected = PostNotFoundException::class)
+    fun create_comment_should_throw() {
+        var result = createComment(
+            Comment(
+                0, 100, 36346, 47643, "Hello, Kotlin!", null,
+                null, null, null, null, null
+            )
+        )
+        assertTrue(result)
+    }
+
+    @Test
+    fun create_comment_no_exception() {
+        var result = createComment(
+            Comment(
+                0, 1, 36346, 47643, "Hello, Kotlin!", null,
+                null, null, null, null, null
+            )
+        )
+        assertTrue(result)
+    }
+
 }
 
-/*
-
-            AudioAttachment(
-                1, 777,
-                "https://...mp3",
-                Audio("Nickelback", "Far away", 238, 5654, 657567, 1),
-                24354, false, true
-            )
- */
