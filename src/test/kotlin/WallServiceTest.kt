@@ -3,7 +3,6 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import ru.netology.*
-import ru.netology.WallService.createComment
 
 class WallServiceTest {
     @Before
@@ -153,7 +152,7 @@ class WallServiceTest {
 
     @Test(expected = PostNotFoundException::class)
     fun create_comment_should_throw() {
-        var result = createComment(
+        var result = WallService.createComment(
             Comment(
                 0, 100, 36346, 47643, "Hello, Kotlin!", null,
                 null, null, null, null, null
@@ -164,7 +163,7 @@ class WallServiceTest {
 
     @Test
     fun create_comment_no_exception() {
-        var result = createComment(
+        var result = WallService.createComment(
             Comment(
                 0, 1, 36346, 47643, "Hello, Kotlin!", null,
                 null, null, null, null, null
